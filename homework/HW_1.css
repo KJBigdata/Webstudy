@@ -67,6 +67,6 @@ input[type="submit"] {
   font-size: 13pt;
 }
 .wrap {
-  width: 400px;
-  margin: 50px auto 0 auto;
+  width: 600px;
+  margin: auto;
 }
