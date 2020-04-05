@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='HW_4.css') }}">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <style></style>
+  </head>
+  <script>
+    function checkphone(p) {
+      var regExp = /^\d{3}-\d{4}-\d{4}$/;
+      return regExp.test(p);
+    }
+    function order() {
+      let name = $("#name").val();
+      let count = $("#count").val();
+      let address = $("#address").val();
+      let phone = $("#phone").val();
+      if (name == "") {
+        alert("성함을 입력해주세요");
+        $("#name").focus();
+      } else if (count == "") {
+        alert("수량을 입력해주세요");
+        $("#count").focus();
+      } else if (address == "") {
+        alert("주소를 입력해주세요");
+        $("#address").focus();
+      } else if (phone == "") {
+        alert("전화번호를 입력해주세요");
+        $("#phone").focus();
+      } else if (!checkphone(phone)) {
+        alert(
+          "전화번호 입력형식이 다릅니다. \n xxx-xxxx-xxxx 형식으로 입력해주세요"
+        );
+        $("#phone").focus();
+      }
+       $.ajax({
+        type: "POST",
+        url: "/orders",
+        data: { name : name, count : count, address : address, phone : phone},
+        error:function(request,status,error){
+              alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);},
+
+        success: function(response){
+          console.log(response)
+          if(response['result'] == 'success'){
+            alert('주문 완료!');
+            window.location.reload();
+          }
+        }
+      })
+    }
+
+
+    $(document).ready(function(){
+      $('#orders-box').html('');
+      listing();
+    });
+
+    function listing() {
+      $.ajax({
+        type: "GET",
+        url: "/orders",
+        data: {},
+        success: function(response){
+          console.log(response)
+           if (response['result'] == 'success') {
+             let orders = response['orders'];
+             console.log(orders);
+             for (let i = 0; i < orders.length; i++) {
+               make_order(orders[i]['name'],orders[i]['count'],orders[i]['address'],orders[i]['phone'])
+             }
+           } else {
+             alert('데이터를 받아오지 못했습니다');
+           }
+        }
+      })
+    }
+    function make_order(name,count,address,phone) {
+      let temp_html = '<tr>\
+          <td>'+name+'</td>\
+          <td>'+count+'</td>\
+          <td>'+address+'</td>\
+          <td>'+phone+'</td>\
+        </tr>';
+      $('#orders-box').append(temp_html);
+    }
+
+  </script>
+  <body>
+    <div class="wrap">
+      <div class="container">
+        <div class="product">
+          <h1>붕어빵 드쉴?</h1>
+        </div>
+
+        <div>
+          <h1>
+            상품제목
+            <span id="price">
+              가격 : 1,000원 / 개
+            </span>
+          </h1>
+        </div>
+
+        <p>
+          이 상품으로 말할 것 같으면 용왕의 간식. 지상의 인간에게 유일하게
+          허락된 해저의 귀한 음식! 단 돈 천원! 자, 드시지요!
+        </p>
+
+        <h1>주문하기</h1>
+
+        <div class="input-group">
+          <div class="region-left">
+            <label>주문자 성함</label>
+          </div>
+          <div class="region-right">
+            <input type="text" id="name" placeholder="Name" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="region-left">
+            <label for="count">수량</label>
+          </div>
+          <div class="region-right">
+            <select id="count" name="Amounts">
+              <option value="">수량을 입력해주세요</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="region-left">
+            <label for="address">주소</label>
+          </div>
+          <div class="region-right">
+            <input type="text" id="address" placeholder="Address" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="region-left">
+            <label for="phone">전화번호</label>
+          </div>
+          <div class="region-right">
+            <input type="text" id="phone" placeholder="Phone Number" />
+          </div>
+        </div>
+
+        <div class="ButtonOrder">
+          <input type="submit" value="주문하기" onclick="order()" />
+        </div>
+        <div class="orders">
+          <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">이름</th>
+              <th scope="col">수량</th>
+              <th scope="col">주소</th>
+              <th scope="col">전화번호</th>
+            </tr>
+          </thead>
+          <tbody id="orders-box">
+            <tr>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+* {
+  width: 600px;
+  margin: 10px auto;
+}
+.product {
+  color: white;
+  text-align: center;
+  background-image: url("https://previews.123rf.com/images/nutria3000/nutria30001607/nutria3000160700247/60162330-%EB%B6%95%EC%96%B4%EB%B9%B5.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 600px;
+  height: 400px;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.product {
+  margin: auto;
+}
+.container {
+  padding: 20px;
+}
+.region-left {
+  float: left;
+  width: 25%;
+  margin-top: 5px;
+}
+
+.region-right {
+  float: left;
+  width: 75%;
+  margin-top: 5px;
+}
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+input[type="text"] {
+  width: 75%;
+  padding: 12px;
+  border: 3px solid gray;
+  border-radius: 5px;
+}
+select {
+  width: 81%;
+  padding: 12px;
+  border: 3px solid gray;
+  border-radius: 5px;
+}
+/* Input box와 Select box의 크기.. 조절 어떻게 맞출 수 있을까? */
+
+input[type="submit"] {
+  background-color: #4caf50;
+  width: 80%;
+  color: white;
+  display: block;
+  padding: 12px 5px;
+  border: none;
+  border-radius: 5px;
+}
+#price {
+  margin: 18pt;
+  font-size: 13pt;
+}
+.wrap {
+  width: 600px;
+  margin: auto;
+}
